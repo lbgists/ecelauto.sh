@@ -1,0 +1,61 @@
+
+
+                     Elementary Cellular Automaton in Bash
+
+
+This is an implementation that generates cell states with Elementary Cellular 
+Automaton [1] (ECA) rule and prints out the cell states.
+
+
+                                  SCREENSHOTS
+
+
+- rule-110.png, the rightmost cell's initial state is 1.
+
+
+                                    OPTIONS
+
+
+* -r for rule number, default is Rule 110
+* -n for number of cells, default is half of terminal width
+* -i for initial states, default is all 0 but the middle cell
+
+
+                                IMPLEMENTATION
+
+
+It implements the tape as array, in cyclic tag system [2], each element is a 
+cell, storing '0' and '1' characters which also used in arithmetic evaluation 
+as integers 0 and 1.  It does not use bits for cell states.
+
+The main part of ECA is to generate the next cell states, which is implemented 
+as:
+
+    ((
+        currP = L << 2
+              | C << 1
+              | R,
+        nextC = (RULE_NO >> curr) & 1
+    ))
+
+Where
+
+- currP is the current pattern of currently generated cell C with left cell L 
+  and right cell R to C as higher and lower bits, three forms a binary.
+
+- nextC is the next state for C, which is a bit in RULE_NO, indexed by currP.
+
+The last line in the code above is a bit copier, which shifts the wanted bit 
+(next state) by currP to the lowest bit address, and use bitwise AND to get the 
+bit.
+
+
+                                   COPYRIGHT
+
+
+This project is licensed under the MIT License.
+
+
+[1] https://en.wikipedia.org/wiki/Elementary_cellular_automaton
+    http://mathworld.wolfram.com/ElementaryCellularAutomaton.html
+[2] https://en.wikipedia.org/wiki/Tag_system#Cyclic_tag_systems
